@@ -1,65 +1,48 @@
 # Repository instructions
 
-This repository tracks paper implementations as independently versioned Git
-submodules. Keep the root repository as a lightweight index; implementation code
-belongs in each paper's fork and submodule.
+This repository is an index of paper implementations. Each paper implementation
+must live in its own Git submodule at the repository root.
 
-## Current implementation
+## Repository structure
 
-- Paper: MicroMix
-- Submodule: `MicroMix/`
-- Fork: `https://github.com/130bb56/MicroMix.git`
-- Working branch: `micromix`
-- Upstream implementation: `https://github.com/lwy2020/MicroMix.git`
+- Treat every paper directory as an independent repository and submodule.
+- Keep implementation source, history, dependencies, and build files inside that
+  paper's submodule.
+- Keep the root repository limited to submodule pointers and repository-wide
+  metadata such as `README.md` and `.gitmodules`.
+- Do not vendor or flatten submodule source into the root repository.
 
-## Working with a paper implementation
+## Making changes
 
-Before editing MicroMix, enter the submodule and attach HEAD to its working branch:
+1. Check `git status` in both the root repository and the target submodule.
+2. Make and commit implementation changes inside the target submodule.
+3. Push the submodule commit to its configured writable fork and working branch.
+4. Return to the root repository and commit the updated submodule pointer.
+5. Update the corresponding `README.md` row when its repository, status, or
+   implementation summary changes.
 
-```bash
-cd MicroMix
-git switch micromix
-git submodule update --init --recursive
-```
+Never assume that every paper uses the same branch, remote, dependencies, build
+commands, kernels, or tests. Inspect the target submodule before acting.
 
-Commit implementation changes inside `MicroMix` first. Push those changes to the
-fork's working branch. Then return to the root repository and commit only the
-updated submodule pointer and root-level metadata.
+## README format
 
-```bash
-cd MicroMix
-git add <changed-files>
-git commit -m "<implementation change>"
-git push origin micromix
+Keep `README.md` as a single table with these columns:
 
-cd ..
-git add MicroMix
-git commit -m "Update MicroMix submodule revision"
-```
+`Paper | Repository | Status | Info`
 
-Do not vendor a submodule's source into the root repository, delete its `.git`
-metadata, or flatten nested repositories. Do not commit generated model files,
-benchmark outputs, build products, temporary binaries, or local scratch files.
+- Paper: short paper name linked to the paper.
+- Repository: working branch name linked to that branch in its implementation fork.
+- Status: only `In progress` or `Done`.
+- Info: one concise sentence describing the implemented kernel or core mechanism.
 
-## Remotes and upstream changes
+Add one row per paper submodule. Do not add prose sections to the README.
 
-- `origin` is the writable fork.
-- `upstream` is the official repository and must not be pushed to.
-- Fetch and integrate upstream changes inside the submodule, push the result to
-  the fork, and then update the root submodule pointer.
+## Safety
 
-## Documentation
-
-- Keep `README.md` as the compact paper status table requested by the user.
-- Update its Branch, Status, Kernels, and Test cells when the pinned implementation
-  changes.
-- Use a single `branch@short-commit` link in the Branch cell.
-- Keep detailed agent-facing repository procedures in this file rather than
-  expanding the README.
-
-## Local state
-
-Preserve unrelated user changes in both the root repository and submodules. Check
-`git status` in both scopes before staging or committing. Never commit or remove
-untracked files without first determining whether they are user work or generated
-artifacts.
+- Preserve unrelated user changes in the root repository and all submodules.
+- Do not stage, commit, delete, or overwrite untracked files without determining
+  whether they are user work or generated artifacts.
+- Do not commit model weights, datasets, checkpoints, benchmark outputs, build
+  products, virtual environments, temporary binaries, or scratch files.
+- Never delete or move nested Git metadata to make a submodule look like a normal
+  directory.
