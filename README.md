@@ -1,5 +1,3 @@
-# Papers
-
-| Paper | Branch | Status | Kernels | Test |
-|---|---|---|---|---|
-| [MicroMix: Efficient Mixed-Precision Quantization with Microscaling Formats for Large Language Models](https://arxiv.org/abs/2508.02343)<br>[Implementation](MicroMix/) | [`micromix@dbc0071`](https://github.com/130bb56/MicroMix/commit/dbc00716f01f0dc5a0e81b093e1b51b469e758b3) | In progress<br>Reorder and MXFP4/6/8 quantization and packing implemented<br>W4A4, W4A6, and W4A8 GEMM implemented<br>Python bindings and Llama/Qwen/Mixtral execution paths implemented<br>Llama 3.1 GQA benchmark fix applied | `mgemm/src/reorder.cu`<br>`mgemm/src/gemm.cu`<br>`mgemm/src/w4a4.cu`<br>`mgemm/src/w4a6.cu`<br>`mgemm/src/w4a8.cu`<br>`mgemm/src/bindings.cpp` | Build: `cd MicroMix/mgemm && bash make.sh`<br>Kernel: `./build/bench_mxf4f6f8 32 4096 4096 100 8x4 --validate`<br>Accuracy/PPL: `cd MicroMix && bash test.sh /PATH/TO/MODEL`<br>E2E: `python benchmarks/benchmark_e2e_micromix.py --model llama-3.1-8b --batch_size 8 --prefill_seq_len 2048` |
+| Paper | Branch | Status | Info |
+|---|---|---|---|
+| [MicroMix](https://arxiv.org/abs/2508.02343) | [`micromix@dbc0071`](https://github.com/130bb56/MicroMix/commit/dbc00716f01f0dc5a0e81b093e1b51b469e758b3) | In progress | Mixed-precision CUDA kernels that reorder and quantize activations into MXFP4/6/8 and run W4A4, W4A6, and W4A8 GEMMs. |
